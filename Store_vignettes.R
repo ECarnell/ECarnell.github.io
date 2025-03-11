@@ -56,7 +56,7 @@ vgn <- paste0(lib_pth,"/SpatialUKCEH/doc/") %>% list.files(pattern = ".html",rec
 
 vgn <- vgn[!grepl("index",vgn)]
 
-subheading_node <- xml_add_child(body_node, "h2", "AgricInvUKCEH package:")
+subheading_node <- xml_add_child(body_node, "h2", "SpatialUKCEH package:")
 
 for(v in vgn){
   print(v)
