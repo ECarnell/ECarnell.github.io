@@ -14,16 +14,17 @@ index_html <- read_html("./index_template.html")
 # Add title and subheading
 body_node <- xml_find_first(index_html, "//body")
 
-build_vig <- T
+build_vig <- F
 if(build_vig){
+  devtools::install_github("ECarnell/SpatialUKCEH",
+                           ref = "main",
+                           build_vignettes = T,
+                           auth_token = Sys.getenv("GITHUBTOKEN"))
 devtools::install_github("ECarnell/AgricInvUKCEH",
                          ref = "main",
                          build_vignettes = T,
                          auth_token = Sys.getenv("GITHUBTOKEN"))
-  devtools::install_github("ECarnell/SpatialUKCEH",
-                           ref = "main",
-                           build_vignettes = T,
-                           auth_token = Sys.getenv("GITHUBTOKEN"))}
+}
 
 
 lib_pth <- .libPaths() %>% .[grepl("AppData",.)]
@@ -42,7 +43,8 @@ nme <- bse %>% gsub("_"," ",.) %>% gsub("\\.html","",.)
 nw_fl <- paste0("./html/",bse)
 
 file.copy(from = v,
-          to = nw_fl)
+          to = nw_fl,
+          overwrite = T)
   
 new_link <- paste0('<a href="html/',bse,'">',nme,'</a>')
 link_node <- xml_add_child(body_node, "a", nme, href = paste0("html/", bse))
@@ -65,7 +67,8 @@ for(v in vgn){
   nw_fl <- paste0("./html/",bse)
   
   file.copy(from = v,
-            to = nw_fl)
+            to = nw_fl,
+            overwrite = T)
   
   new_link <- paste0('<a href="html/',bse,'">',nme,'</a>')
   link_node <- xml_add_child(body_node, "a", nme, href = paste0("html/", bse))
