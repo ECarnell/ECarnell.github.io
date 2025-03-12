@@ -1,9 +1,9 @@
 require(magrittr)
 require(devtools)
 require(xml2)
-require(SpatialUKCEH)
 
-build_vig <- F
+
+build_vig <- T
 if(build_vig){
   devtools::install_github("ECarnell/SpatialUKCEH",
                            ref = "main",
@@ -14,7 +14,7 @@ if(build_vig){
                            build_vignettes = T,
                            auth_token = Sys.getenv("GITHUBTOKEN"))
 }
-
+require(SpatialUKCEH)
 setwd("~/ECarnell.github.io/")
 create_dir("./html/")
 

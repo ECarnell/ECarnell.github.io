@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Ed Carnell, Clare Pearson, Will Fincham, Hannah Little" />
+
+<meta name="date" content="2025-03-12" />
+
+<title>Gridded Datasets</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Gridded Datasets</h1>
+<h4 class="author">Ed Carnell, Clare Pearson, Will Fincham, Hannah
+Little</h4>
+<h4 class="date">12 March 2025</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#nh3-concentrations" id="toc-nh3-concentrations">NH<sub>3</sub> Concentrations</a>
+<ul>
+<li><a href="#loading-calibrated-nh3-concentrations" id="toc-loading-calibrated-nh3-concentrations">Loading calibrated
+NH<sub>3</sub> concentrations</a></li>
+<li><a href="#site-level-nh3-concentration-estimates" id="toc-site-level-nh3-concentration-estimates">Site level
+NH<sub>3</sub> concentration estimates</a></li>
+<li><a href="#site-level-nh3-critical-level-exceedance" id="toc-site-level-nh3-critical-level-exceedance">Site level
+NH<sub>3</sub> critical level exceedance</a></li>
+<li><a href="#plotting-nh3-concentrations" id="toc-plotting-nh3-concentrations">Plotting NH<sub>3</sub>
+concentrations</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="nh3-concentrations" class="section level1">
+<h1>NH<sub>3</sub> Concentrations</h1>
+<div id="loading-calibrated-nh3-concentrations" class="section level2">
+<h2>Loading calibrated NH<sub>3</sub> concentrations</h2>
+<ul>
+<li><strong>conc_nh3_r</strong>: function returning a SpatRaster of
+calibrated NH<sub>3</sub> concentrations for 2002 - 2021 from
+TR2023.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">require</span>(RColorBrewer)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># Return site using a site ID</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>conc_stk <span class="ot">&lt;-</span> <span class="fu">conc_nh3_r</span>(<span class="at">yrs =</span> <span class="dv">2019</span><span class="sc">:</span><span class="dv">2021</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>conc_stk</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 1216, 656, 3  (nrow, ncol, nlyr)
+## resolution  : 1000, 1000  (x, y)
+## extent      : 0, 656000, 5000, 1221000  (xmin, xmax, ymin, ymax)
+## coord. ref. : OSGB36 / British National Grid (EPSG:27700) 
+## source      : nh3_concs.tif 
+## names       : X2019,  X2020,  X2021 
+## min values  :  0.11, 0.0712, 0.0486 
+## max values  :  9.53, 7.0040, 6.8200</code></pre>
+</div>
+<div id="site-level-nh3-concentration-estimates" class="section level2">
+<h2>Site level NH<sub>3</sub> concentration estimates</h2>
+<p>The <code>ste_nh3_concs()</code> function returns a data.frame or
+data.table or site level NH<sub>3</sub> concentration estimates, where
+the mean_nh3 concentration represents an area weighted mean.</p>
+<div id="return-area-weighted-nh3-concentrations-for-selected-sacs" class="section level3">
+<h3>Return area weighted NH<sub>3</sub> concentrations for selected
+SACs</h3>
+<ul>
+<li>Argument <code>yrs</code> defaults to 2019 - 2021</li>
+<li>Setting <code>agr_yrs = T</code> returns the average across the 3
+years (DEFAULT)</li>
+<li>A data.table is returned as default, setting <code>as_dt = F</code>
+returns a data.frame</li>
+<li>Lowering <code>prcsn</code> to improves accuracy (and increases
+processing time)</li>
+<li>The column DIFF_HA in output indicated difference in area of sf
+object to raster representation</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">ste_nh3_concs</span>(<span class="at">ste_type =</span> <span class="st">&quot;SAC&quot;</span>,<span class="at">id =</span> <span class="fu">c</span>(<span class="st">&quot;UK0030322&quot;</span>,<span class="st">&quot;UK0016599&quot;</span>),<span class="at">as_dt =</span> T, <span class="at">prcsn =</span> <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="kable-table">
+<table>
+<colgroup>
+<col width="11%" />
+<col width="18%" />
+<col width="13%" />
+<col width="16%" />
+<col width="15%" />
+<col width="15%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">SITECODE</th>
+<th align="left">SITENAME</th>
+<th align="left">Year</th>
+<th align="right">mean_nh3_conc</th>
+<th align="right">min_nh3_conc</th>
+<th align="right">max_nh3_conc</th>
+<th align="right">DIFF_HA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="left">2019 - 2021</td>
+<td align="right">2.49</td>
+<td align="right">2.15</td>
+<td align="right">3.13</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">UK0030322</td>
+<td align="left">Curran Bog</td>
+<td align="left">2019 - 2021</td>
+<td align="right">2.69</td>
+<td align="right">2.31</td>
+<td align="right">3.41</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="return-area-weighted-nh3-concentrations-for-ballynahone-bog-sac-for-2012---2021" class="section level3">
+<h3>Return area weighted NH<sub>3</sub> concentrations for Ballynahone
+Bog SAC for 2012 - 2021</h3>
+<ul>
+<li>Argument <code>yrs</code> set to 2012 - 2021</li>
+<li>Setting <code>agr_yrs = F</code> returns annual estimates</li>
+<li>Lowering <code>prcsn</code> to improves accuracy (and increases
+processing time)</li>
+<li>A data.table is returned as default, setting <code>as_dt = F</code>
+returns a data.frame</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">ste_nh3_concs</span>(<span class="at">ste_type =</span> <span class="st">&quot;SAC&quot;</span>,<span class="at">id =</span> <span class="st">&quot;UK0016599&quot;</span>,<span class="at">yrs =</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>, <span class="at">agr_yrs =</span> F,<span class="at">as_dt =</span> T, <span class="at">prcsn =</span> <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="kable-table">
+<table style="width:100%;">
+<colgroup>
+<col width="12%" />
+<col width="20%" />
+<col width="6%" />
+<col width="17%" />
+<col width="16%" />
+<col width="16%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">SITECODE</th>
+<th align="left">SITENAME</th>
+<th align="right">Year</th>
+<th align="right">mean_nh3_conc</th>
+<th align="right">min_nh3_conc</th>
+<th align="right">max_nh3_conc</th>
+<th align="right">DIFF_HA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2012</td>
+<td align="right">2.08</td>
+<td align="right">2.05</td>
+<td align="right">2.15</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2013</td>
+<td align="right">2.17</td>
+<td align="right">2.13</td>
+<td align="right">2.25</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2014</td>
+<td align="right">2.20</td>
+<td align="right">2.17</td>
+<td align="right">2.28</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2015</td>
+<td align="right">2.41</td>
+<td align="right">2.37</td>
+<td align="right">2.50</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2016</td>
+<td align="right">2.43</td>
+<td align="right">2.39</td>
+<td align="right">2.51</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2017</td>
+<td align="right">2.22</td>
+<td align="right">2.16</td>
+<td align="right">2.31</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2018</td>
+<td align="right">2.87</td>
+<td align="right">2.82</td>
+<td align="right">2.96</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2019</td>
+<td align="right">3.03</td>
+<td align="right">2.98</td>
+<td align="right">3.13</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2020</td>
+<td align="right">2.26</td>
+<td align="right">2.22</td>
+<td align="right">2.32</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">2021</td>
+<td align="right">2.19</td>
+<td align="right">2.15</td>
+<td align="right">2.25</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> dt, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> mean_nh3_conc, <span class="at">color =</span> SITENAME),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                    <span class="at">size =</span> <span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">data =</span> dt, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> mean_nh3_conc, <span class="at">color =</span> SITENAME),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>                    <span class="at">linewidth =</span> <span class="fl">0.5</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_errorbar</span>(<span class="at">data =</span> dt, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">ymin =</span> min_nh3_conc, <span class="at">ymax =</span> max_nh3_conc,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>                                      <span class="at">color =</span> SITENAME),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>                     <span class="at">alpha =</span> <span class="fl">0.6</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">bquote</span>(<span class="st">&quot;Ammonia Concentration&quot;</span><span class="sc">~</span><span class="st">&quot;(&quot;</span><span class="sc">*</span>mu<span class="sc">*</span>g<span class="sc">~</span>NH[<span class="dv">3</span>]<span class="sc">~</span>m<span class="sc">^-</span><span class="dv">3</span><span class="sc">*</span><span class="st">&quot;)&quot;</span>))</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="site-level-nh3-critical-level-exceedance" class="section level2">
+<h2>Site level NH<sub>3</sub> critical level exceedance</h2>
+<p>The <code>ste_cle_status()</code> function returns a data.frame or
+data.table or site level NH<sub>3</sub> critical level exceedances
+against the 1 and 3 ug NH<sub>3</sub> critical level.</p>
+<div id="return-nh3-critical-level-status-for-selected-sacs" class="section level3">
+<h3>Return NH<sub>3</sub> critical level status for selected SACs</h3>
+<ul>
+<li>Argument <code>yrs</code> defaults to 2019 - 2021</li>
+<li>Setting <code>agr_yrs = T</code> returns the average across the 3
+years (DEFAULT)</li>
+<li>A data.table is returned as default, setting <code>as_dt = F</code>
+returns a data.frame</li>
+<li>Lowering <code>prcsn</code> to improves accuracy (and increases
+processing time)</li>
+<li>The column DIFF_HA in output indicated difference in area of sf
+object to raster representation</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">ste_cle_status</span>(<span class="at">ste_type =</span> <span class="st">&quot;SAC&quot;</span>,<span class="at">id =</span> <span class="fu">c</span>(<span class="st">&quot;UK0030322&quot;</span>,<span class="st">&quot;UK0016599&quot;</span>),<span class="at">as_dt =</span> T, <span class="at">prcsn =</span> <span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="kable-table">
+<table>
+<colgroup>
+<col width="7%" />
+<col width="10%" />
+<col width="6%" />
+<col width="10%" />
+<col width="5%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="5%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Year</th>
+<th align="left">COUNTRY</th>
+<th align="left">SITECODE</th>
+<th align="left">SITENAME</th>
+<th align="right">AREA_HA</th>
+<th align="right">mean_nh3_conc</th>
+<th align="right">min_nh3_conc</th>
+<th align="right">max_nh3_conc</th>
+<th align="right">DIFF_HA</th>
+<th align="left">DW_1ug</th>
+<th align="right">AW_1ug</th>
+<th align="right">AW2_1ug</th>
+<th align="left">DW_3ug</th>
+<th align="right">AW_3ug</th>
+<th align="right">AW2_3ug</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019 - 2021</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.49</td>
+<td align="right">2.45</td>
+<td align="right">2.57</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">2019 - 2021</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0030322</td>
+<td align="left">Curran Bog</td>
+<td align="right">184</td>
+<td align="right">2.69</td>
+<td align="right">2.64</td>
+<td align="right">2.79</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">184</td>
+<td align="right">184</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="return-nh3-critical-level-status-for-ballynahone-bog-sac-for-2012---2021" class="section level3">
+<h3>Return NH<sub>3</sub> critical level status for Ballynahone Bog SAC
+for 2012 - 2021</h3>
+<ul>
+<li>Argument <code>yrs</code> set to 2012 - 2021</li>
+<li>Setting <code>agr_yrs = F</code> returns annual estimates</li>
+<li>Lowering <code>prcsn</code> to improves accuracy (and increases
+processing time)</li>
+<li>A data.table is returned as default, setting <code>as_dt = F</code>
+returns a data.frame</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">ste_cle_status</span>(<span class="at">ste_type =</span> <span class="st">&quot;SAC&quot;</span>,<span class="at">id =</span> <span class="st">&quot;UK0016599&quot;</span>,<span class="at">yrs =</span> <span class="dv">2012</span><span class="sc">:</span><span class="dv">2021</span>, <span class="at">agr_yrs =</span> F,<span class="at">as_dt =</span> T, <span class="at">prcsn =</span> <span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>dt</span></code></pre></div>
+<div class="kable-table">
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="11%" />
+<col width="6%" />
+<col width="10%" />
+<col width="5%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="5%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Year</th>
+<th align="left">COUNTRY</th>
+<th align="left">SITECODE</th>
+<th align="left">SITENAME</th>
+<th align="right">AREA_HA</th>
+<th align="right">mean_nh3_conc</th>
+<th align="right">min_nh3_conc</th>
+<th align="right">max_nh3_conc</th>
+<th align="right">DIFF_HA</th>
+<th align="left">DW_1ug</th>
+<th align="right">AW_1ug</th>
+<th align="right">AW2_1ug</th>
+<th align="left">DW_3ug</th>
+<th align="right">AW_3ug</th>
+<th align="right">AW2_3ug</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2012</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.08</td>
+<td align="right">2.05</td>
+<td align="right">2.15</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.17</td>
+<td align="right">2.13</td>
+<td align="right">2.25</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2014</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.20</td>
+<td align="right">2.17</td>
+<td align="right">2.28</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2015</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.41</td>
+<td align="right">2.37</td>
+<td align="right">2.50</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2016</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.43</td>
+<td align="right">2.39</td>
+<td align="right">2.51</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2017</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.22</td>
+<td align="right">2.16</td>
+<td align="right">2.31</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2018</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.87</td>
+<td align="right">2.82</td>
+<td align="right">2.96</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">3.03</td>
+<td align="right">2.98</td>
+<td align="right">3.13</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">196</td>
+</tr>
+<tr class="odd">
+<td align="right">2020</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.26</td>
+<td align="right">2.22</td>
+<td align="right">2.32</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2021</td>
+<td align="left">NORTHERN IRELAND</td>
+<td align="left">UK0016599</td>
+<td align="left">Ballynahone Bog</td>
+<td align="right">244</td>
+<td align="right">2.19</td>
+<td align="right">2.15</td>
+<td align="right">2.25</td>
+<td align="right">0</td>
+<td align="left">TRUE</td>
+<td align="right">244</td>
+<td align="right">244</td>
+<td align="left">FALSE</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="plotting-nh3-concentrations" class="section level2">
+<h2>Plotting NH<sub>3</sub> concentrations</h2>
+<div id="using-ggplot" class="section level3">
+<h3>Using ggplot</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># lazy load NH3 concs</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>r_nh3 <span class="ot">&lt;-</span> <span class="fu">conc_nh3_r</span>(<span class="at">yrs =</span> <span class="dv">2019</span><span class="sc">:</span><span class="dv">2021</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">names</span>(r_nh3) <span class="ot">&lt;-</span> <span class="dv">2019</span><span class="sc">:</span><span class="dv">2021</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># Set colour breaks</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># Set colour ramp</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#85c6ff&quot;</span>,<span class="fu">brewer.pal</span>(<span class="fu">length</span>(brks)<span class="sc">-</span><span class="dv">1</span>,<span class="st">&quot;YlOrRd&quot;</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># plot concs</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>SpatialUKCEH<span class="sc">::</span><span class="fu">plot_r_cats</span>(<span class="at">legnd_txt=</span><span class="st">&quot;NH[3]~&#39;Concentrations&#39;&quot;</span>, </span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>                  <span class="at">unit =</span> <span class="st">&quot;&#39;(&#39;*mu*g~NH[3]~m^-3*&#39;)&#39;&quot;</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>                  <span class="at">r =</span> r_nh3,</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>                  <span class="at">cols =</span> cols,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                  <span class="at">ncols =</span> <span class="dv">3</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>                  <span class="at">brks =</span> brks)</span></code></pre></div>
+<pre><code>## &lt;SpatRaster&gt; resampled to 500760 cells.</code></pre>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="using-leaflet" class="section level3">
+<h3>Using leaflet</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Return calibrated EMEP4UK ammonia concentrations (2019 - 2021)</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co"># aggregate to 3 year mean</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>r_nh3_conc_19_21 <span class="ot">&lt;-</span> <span class="fu">conc_nh3_r</span>(<span class="at">yrs =</span> <span class="dv">2019</span><span class="sc">:</span><span class="dv">2021</span>) <span class="sc">%&gt;%</span> <span class="fu">app</span>(., mean, <span class="at">na.rm =</span> T)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">crs</span>(r_nh3_conc_19_21) <span class="ot">&lt;-</span> <span class="st">&quot;EPSG:27700&quot;</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="do">## project to 3857</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>r_conc_19_21_3857 <span class="ot">&lt;-</span> <span class="fu">project</span>(r_nh3_conc_19_21, <span class="st">&quot;EPSG:3857&quot;</span>, <span class="at">res =</span> <span class="dv">1000</span>) </span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#9ce4ff&quot;</span>,<span class="st">&quot;#fbff87&quot;</span>,<span class="st">&quot;#ffa754&quot;</span>,<span class="st">&quot;#ff5754&quot;</span>,<span class="st">&quot;#b36bff&quot;</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">99</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>labs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0 - 1&quot;</span>,<span class="st">&quot;&gt; 1 - 2&quot;</span>,<span class="st">&quot;&gt; 2 - 3&quot;</span>,<span class="st">&quot;&gt; 3 - 4&quot;</span>,<span class="st">&quot;&gt; 4&quot;</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">colorBin</span>(<span class="at">palette =</span> cols,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>                   <span class="at">bins =</span> brks,</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>                   <span class="at">domain =</span> <span class="fu">values</span>(r_conc_19_21_3857),</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>                <span class="at">na.color =</span> <span class="st">&quot;transparent&quot;</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>Esri.WorldGrayCanvas) <span class="sc">%&gt;%</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="fu">addRasterImage</span>(<span class="at">x =</span> r_conc_19_21_3857, <span class="at">colors =</span> pal, <span class="at">project =</span> F) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="fu">addLegend</span>(<span class="at">colors =</span> cols, </span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>          <span class="at">labels =</span> labs, <span class="at">values =</span> <span class="fu">values</span>(r_conc_19_21_3857))</span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
