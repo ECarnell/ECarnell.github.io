@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Ed Carnell (edcarn@ceh.ac.uk)" />
+
+
+<title>Process 10 km Agricultural Emission Model Outputs</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Process 10 km Agricultural Emission Model
+Outputs</h1>
+<h4 class="author">Ed Carnell (<a href="mailto:edcarn@ceh.ac.uk" class="email">edcarn@ceh.ac.uk</a>)</h4>
+<h4 class="date">Tuesday 11 March 2025</h4>
+
+
+
+<div id="processing-agricultural-emission-model-outputs" class="section level2">
+<h2>Processing Agricultural Emission Model Outputs</h2>
+<div id="load-packages-and-read-in-data" class="section level3">
+<h3>1 - Load packages and read in data</h3>
+<p>The code chunk below loads in the packages required and reads in some
+key datasets required for processing the agricultural emission model
+output. All required resources are stored in the AgricInvUKCEH
+package.</p>
+<p><strong>N.B. Agricultural emission model outputs need to be converted
+to CSV files and stored on the P:/ It is essential that disclosive
+outputs are stored on the P:/ in
+P:/NEC03642_Mapping_Ag_Emissions_AC0112/AC0112-Agric_Inventory/ as
+specified below</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">require</span>(SpatialUKCEH)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">require</span>(AgricInvUKCEH)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">require</span>(magrittr)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">require</span>(sf)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">require</span>(stringr)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">require</span>(knitr)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">require</span>(rmarkdown)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">require</span>(knitr)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co"># set user </span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>usr <span class="ot">&lt;-</span> <span class="st">&quot;Ed Carnell (edcarn@ceh.ac.uk)&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># set emission year</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>yr <span class="ot">&lt;-</span> <span class="dv">2022</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co"># set inventory year</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>inv_yr <span class="ot">&lt;-</span> <span class="dv">2022</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="do">### Set links to files</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co"># agric inventory folder</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>root_dir <span class="ot">&lt;-</span> <span class="st">&quot;P:/08955_Agricultural_Emission_Inventory/&quot;</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co"># Project number (needed for Oracle table names)</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>proj_num <span class="ot">&lt;-</span> <span class="st">&quot;SCF0102&quot;</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co"># output folder</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>out.dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(root_dir,<span class="st">&quot;/&quot;</span>,inv_yr,<span class="st">&quot;_Inventory/Processing_of_Model_Outputs/&quot;</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co"># Create output folder if it doesn&#39;t exist</span></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>SpatialUKCEH<span class="sc">::</span><span class="fu">create_dir</span>(out.dir)</span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="do">### Read in key tables</span></span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co"># Parish areas</span></span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a>par_areas <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(<span class="st">&quot;SELECT * FROM SCF0102_UK_PARISH_AREAS&quot;</span>, <span class="at">as_dt =</span> T)</span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="co"># Spatial relationship between parish boundaries</span></span>
+<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a>par_rels <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(<span class="st">&quot;SELECT * FROM SCF0102_UK_PAR_RELATIONSHIPS WHERE COUNTRY = BORDERING_COUNTRY;&quot;</span>, <span class="at">as_dt =</span> T)</span>
+<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a><span class="co"># List of holdings in parishes (inc. inactive holdings)</span></span>
+<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a>parishes <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(<span class="fu">paste0</span>(<span class="st">&quot;SELECT HOLDING, PARISH, CELL FROM &quot;</span>,proj_num,<span class="st">&quot;_HOLDINGS_TEST &quot;</span>,</span>
+<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a>            <span class="st">&quot;WHERE YEAR = &quot;</span>,yr,<span class="st">&quot;;&quot;</span>), <span class="at">as_dt =</span> T)</span>
+<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a>parishes[,COUNTRY <span class="sc">:=</span> <span class="fu">country_id_to_fct</span>(<span class="fu">substr</span>(HOLDING,<span class="dv">0</span>,<span class="dv">1</span>))]</span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a>rft <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(</span>
+<span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a>            <span class="fu">paste0</span>(<span class="st">&quot;SELECT HOLDING, FARMTYPE FROM &quot;</span>,proj_num,<span class="st">&quot;_RFT_TABLE_TEST &quot;</span>,</span>
+<span id="cb1-56"><a href="#cb1-56" tabindex="-1"></a>            <span class="st">&quot;WHERE YEAR = &quot;</span>,yr,<span class="st">&quot;;&quot;</span>), <span class="at">as_dt =</span> T)</span>
+<span id="cb1-57"><a href="#cb1-57" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" tabindex="-1"></a><span class="co"># Specialist Forage -&gt; General Cropping</span></span>
+<span id="cb1-59"><a href="#cb1-59" tabindex="-1"></a>rft[FARMTYPE <span class="sc">==</span> <span class="dv">11</span>, FARMTYPE <span class="sc">:=</span> <span class="dv">2</span>]</span>
+<span id="cb1-60"><a href="#cb1-60" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-62"><a href="#cb1-62" tabindex="-1"></a><span class="do">### Read in R package files</span></span>
+<span id="cb1-63"><a href="#cb1-63" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-64"><a href="#cb1-64" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" tabindex="-1"></a>Model_grd <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata/mod_grd_10km.gpkg&quot;</span>, <span class="at">package=</span><span class="st">&quot;AgricInvUKCEH&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">st_read</span>(<span class="at">quiet=</span>T)</span>
+<span id="cb1-66"><a href="#cb1-66" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" tabindex="-1"></a>so_lkup <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata/so_lkup.csv&quot;</span>, <span class="at">package=</span><span class="st">&quot;AgricInvUKCEH&quot;</span>) <span class="sc">%&gt;%</span> fread</span>
+<span id="cb1-68"><a href="#cb1-68" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" tabindex="-1"></a>var_lkup <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata/mod_var_lkup.csv&quot;</span>, <span class="at">package=</span><span class="st">&quot;AgricInvUKCEH&quot;</span>) <span class="sc">%&gt;%</span> fread</span>
+<span id="cb1-70"><a href="#cb1-70" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-72"><a href="#cb1-72" tabindex="-1"></a><span class="do">### List pollutants to output</span></span>
+<span id="cb1-73"><a href="#cb1-73" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb1-74"><a href="#cb1-74" tabindex="-1"></a>  </span>
+<span id="cb1-75"><a href="#cb1-75" tabindex="-1"></a>pols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;NH3&quot;</span>,<span class="st">&quot;N2O&quot;</span>,<span class="st">&quot;CH4&quot;</span>,<span class="st">&quot;NO&quot;</span>,<span class="st">&quot;PM10&quot;</span>,<span class="st">&quot;PM2_5&quot;</span>,<span class="st">&quot;NMVOC&quot;</span>)</span>
+<span id="cb1-76"><a href="#cb1-76" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" tabindex="-1"></a>pols_txt <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;NH~3~&quot;</span>,<span class="st">&quot;N~2~O&quot;</span>,<span class="st">&quot;CH~4~&quot;</span>,<span class="st">&quot;NO~x~ (as NO~2~)&quot;</span>,<span class="st">&quot;PM~10~&quot;</span>,<span class="st">&quot;PM~2.5~&quot;</span>,<span class="st">&quot;NMVOC&quot;</span>)</span></code></pre></div>
+</div>
+<div id="merging-disclosive-parishes" class="section level3">
+<h3>2 - Merging Disclosive Parishes</h3>
+<p>The high-resolution holding-level agricultural statistics are subject
+to strict data licencing restrictions, therefore emissions from
+agricultural sectors associated with fewer than 5 agricultural holdings
+need to be merged with other emission sources to comply with data
+agreements in place, until non-disclosive outputs can be achieved.</p>
+<p>This is a crucial step of the processing chain, all agricultural
+parishes containing fewer than 5 (active) holdings/farms are spatially
+aggregated to comply with the data restrictions. The code chunk below
+creates a parish look up table of which parishes need to be merged.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="do">### Merge livestock parishes</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># return unique holdings with livestock items</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>lstk_tabs <span class="ot">&lt;-</span> <span class="fu">paste0</span>(proj_num,<span class="st">&quot;_&quot;</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>           <span class="fu">c</span>(<span class="st">&quot;SHEEP_SCALED&quot;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>             <span class="st">&quot;PIG_2_SCALED&quot;</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>             <span class="st">&quot;POULTRY_2_SCALED&quot;</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>             <span class="st">&quot;MINORLIVESTOCK_SCALED&quot;</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>             <span class="st">&quot;CTS_CTTL&quot;</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>             <span class="st">&quot;CATTLE_2&quot;</span>))</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>lstk_holds <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>             <span class="fu">paste0</span>(<span class="st">&quot;SELECT DISTINCT HOLDING FROM (&quot;</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>             <span class="fu">paste0</span>(<span class="st">&quot;SELECT HOLDING FROM &quot;</span>,lstk_tabs,</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>             <span class="st">&quot; WHERE YEAR = &quot;</span>,yr,</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>             <span class="at">collapse=</span><span class="st">&quot; UNION ALL &quot;</span>),<span class="st">&quot;);&quot;</span>),</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>             <span class="at">as_dt =</span> T)</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co"># Count livestock holding by farmtype and parish</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>lstk_rft_tot <span class="ot">&lt;-</span> <span class="fu">rft_tots</span>(<span class="at">holdings =</span> lstk_holds,parishes,rft)</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co"># Identify disclosive parishes and find neighboring parishes</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>lstk_disc <span class="ot">&lt;-</span> <span class="fu">idtfy_dsclsv_pars</span>(<span class="at">rft_tot =</span> lstk_rft_tot,par_rels,par_areas)</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co"># Merge disclosive parishes</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>lstk_par_lkup <span class="ot">&lt;-</span> <span class="fu">mrg_dsclsv_pars</span>(<span class="at">disc =</span> lstk_disc,<span class="at">rft_tot =</span> lstk_rft_tot)</span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>lstk_par_lkup[,YEAR <span class="sc">:=</span> yr]</span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>lstk_par_lkup[,EMISSION_TYPE <span class="sc">:=</span> <span class="st">&quot;LSTK&quot;</span>]</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="fu">agric_db_query</span>(<span class="fu">paste0</span>(<span class="st">&quot;DELETE FROM SCF0102_PAR_LKUP WHERE YEAR = &quot;</span>,yr,<span class="st">&quot; AND EMISSION_TYPE = &#39;LSTK&#39;&quot;</span>),<span class="at">as_dt =</span> T) <span class="sc">%&gt;%</span> <span class="fu">invisible</span>()</span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="fu">agric_update_tbl</span>(<span class="at">x =</span> lstk_par_lkup, <span class="at">tablename =</span> <span class="st">&quot;SCF0102_PAR_LKUP&quot;</span>, <span class="at">ovwr =</span> T)</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="do">### Merge fertiliser parishes</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co"># return unique holdings with fertiliser items</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>fert_tabs <span class="ot">&lt;-</span> <span class="fu">paste0</span>(proj_num,<span class="st">&quot;_&quot;</span>,<span class="fu">c</span>(<span class="st">&quot;CROP_2_SCALED&quot;</span>,</span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>                           <span class="st">&quot;GRASS_SCALED&quot;</span>))</span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a>fert_holds <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(</span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>             <span class="fu">paste0</span>(<span class="st">&quot;SELECT DISTINCT HOLDING FROM (&quot;</span>,</span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a>             <span class="fu">paste0</span>(<span class="st">&quot;SELECT HOLDING FROM &quot;</span>,fert_tabs,</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>             <span class="st">&quot; WHERE YEAR = &quot;</span>,yr,</span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a>             <span class="at">collapse=</span><span class="st">&quot; UNION ALL &quot;</span>),<span class="st">&quot;);&quot;</span>),</span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a>             <span class="at">as_dt =</span> T)</span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co"># Count fertiliser holding by farmtype and parish</span></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a>fert_rft_tot <span class="ot">&lt;-</span> <span class="fu">rft_tots</span>(<span class="at">holdings =</span> fert_holds,parishes,rft)</span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a><span class="co"># Identify disclosive parishes and find neighboring parishes</span></span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>fert_disc <span class="ot">&lt;-</span> <span class="fu">idtfy_dsclsv_pars</span>(<span class="at">rft_tot =</span> fert_rft_tot,par_rels,par_areas)</span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a><span class="co"># Merge disclosive parishes</span></span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a>fert_par_lkup <span class="ot">&lt;-</span> <span class="fu">mrg_dsclsv_pars</span>(<span class="at">disc =</span> fert_disc,<span class="at">rft_tot =</span> fert_rft_tot)</span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a>fert_par_lkup[,YEAR <span class="sc">:=</span> yr]</span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a>fert_par_lkup[,EMISSION_TYPE <span class="sc">:=</span> <span class="st">&quot;FERT&quot;</span>]</span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a><span class="fu">agric_db_query</span>(<span class="fu">paste0</span>(<span class="st">&quot;DELETE FROM SCF0102_PAR_LKUP WHERE YEAR = &quot;</span>,yr,<span class="st">&quot; AND EMISSION_TYPE = &#39;FERT&#39;&quot;</span>),<span class="at">as_dt =</span> T) <span class="sc">%&gt;%</span> <span class="fu">invisible</span>()</span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a><span class="fu">agric_update_tbl</span>(<span class="at">x =</span> fert_par_lkup,<span class="at">tablename =</span> <span class="st">&quot;SCF0102_PAR_LKUP&quot;</span>, <span class="at">ovwr =</span> T)</span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a>par_mrg_out.dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(out.dir,<span class="st">&quot;1_Parish_Merge/&quot;</span>)</span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a>SpatialUKCEH<span class="sc">::</span><span class="fu">create_dir</span>(par_mrg_out.dir)</span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a>param_lst <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">yr =</span> yr,</span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a>                  <span class="at">usr =</span> usr,</span>
+<span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a>                  <span class="at">par.dir =</span> par_mrg_out.dir)</span>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a><span class="fu">render</span>(<span class="at">input =</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata/Parish_Merge_QA.Rmd&quot;</span>,<span class="at">package =</span> <span class="st">&quot;AgricInvUKCEH&quot;</span>),</span>
+<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a>       <span class="at">output_file =</span> <span class="fu">paste0</span>(param_lst<span class="sc">$</span>par.dir,<span class="st">&quot;Parish_Merge_&quot;</span>,param_lst<span class="sc">$</span>yr,<span class="st">&quot;.html&quot;</span>),</span>
+<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a>       <span class="at">params =</span> param_lst)</span></code></pre></div>
+</div>
+<div id="writing-published-emission-totals-to-oracle" class="section level3">
+<h3>3 - Writing Published Emission Totals to Oracle</h3>
+<p>Every year Sarah Gilhespy (<a href="mailto:sarah.gilhespy@rothamsted.ac.uk" class="email">sarah.gilhespy@rothamsted.ac.uk</a>) sends us an Excel
+spreadsheet containing the official, published emission totals for each
+agricultural source sector. The spreadsheet is used to scale our
+emission totals to, occasionally there are slight differences in the
+submitted totals versus the emission model output (typically due to
+versioning). The spreadsheet also provides “non-coded model totals”
+these are (usually) minor sources of agricultural NH<sub>3</sub> that
+haven’t been included in the emission model but that we need to create
+spatial maps for.</p>
+<p>In this step we reformat the spreadsheet and write the totals to an
+Oracle DB for faster access.</p>
+<p>Things to note:</p>
+<ul>
+<li>The sources we need to subset/include may change over time</li>
+<li>Each inventory year will have new totals (for all years in the time
+series), so the table name needs to be adjusted with inventory year</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">require</span>(readxl)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>rres_tots_dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(root_dir,<span class="st">&quot;2022_Inventory/RRes_Totals/&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>rres_fl <span class="ot">&lt;-</span> <span class="st">&quot;Ag_inventory_submission_1990-2022_FINAL_standard output_with pivot table check.xlsx&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>xl1 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(rres_tots_dir, rres_fl) <span class="sc">%&gt;%</span> <span class="fu">read_excel</span>(<span class="at">sheet =</span> <span class="st">&quot;Coded model&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.table</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>xl1_sub <span class="ot">&lt;-</span> xl1[TYPE <span class="sc">==</span> <span class="st">&quot;Pollutant Emission&quot;</span> <span class="sc">&amp;</span> SOURCE <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Sewage Sludge Cake&quot;</span>,<span class="st">&quot;Sewage Sludge Liquid&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>                            <span class="st">&quot;Digestate_ Cropbased&quot;</span>,<span class="st">&quot;Digestate_ Foodbased&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>                            <span class="st">&quot;Digestate_ Otherorganicresidue&quot;</span>),.(YEAR,<span class="at">TABLE =</span> <span class="st">&quot;CODED MODEL&quot;</span>,COUNTRY,POLLUTANT,SOURCE,VALUE,UNIT)]</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>xl2 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(rres_tots_dir, rres_fl) <span class="sc">%&gt;%</span> <span class="fu">read_excel</span>(<span class="at">sheet =</span> <span class="st">&quot;Non-coded model&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.table</span>()</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>xl2[<span class="fu">grepl</span>(<span class="st">&quot;Field burning&quot;</span>,SOURCE), SOURCE <span class="sc">:=</span> <span class="st">&quot;Field Burning&quot;</span>]</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>xl2[COUNTRY <span class="sc">==</span> <span class="st">&quot;NIreland&quot;</span>, COUNTRY <span class="sc">:=</span> <span class="st">&quot;Northern Ireland&quot;</span>]</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>xl2_sub <span class="ot">&lt;-</span> xl2[POLLUTANT <span class="sc">%in%</span> pols <span class="sc">&amp;</span> SOURCE <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Managed histosols&quot;</span>,<span class="st">&quot;Field Burning&quot;</span>,<span class="st">&quot;Cultivated crops - rough grazing&quot;</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>                            <span class="st">&quot;Cropland management mineralisation&quot;</span>,<span class="st">&quot;Cropland management mineralisation - indirect leaching&quot;</span>),</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>                            .(YEAR,<span class="at">TABLE =</span> <span class="st">&quot;NON CODED MODEL&quot;</span>,COUNTRY,POLLUTANT,SOURCE,VALUE,UNIT)]</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">rbind</span>(xl1_sub, xl2_sub)</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> tbl[,.(<span class="at">VALUE =</span> <span class="fu">sum</span>(VALUE)), by <span class="ot">=</span> .(YEAR,TABLE,COUNTRY,POLLUTANT,SOURCE,UNIT)]</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>tbl[,COUNTRY <span class="sc">:=</span> <span class="fu">as.numeric</span>(<span class="fu">factor</span>(COUNTRY, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;England&quot;</span>,<span class="st">&quot;Wales&quot;</span>,<span class="st">&quot;Scotland&quot;</span>,<span class="st">&quot;Northern Ireland&quot;</span>),</span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>                           <span class="at">labels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>))]</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>tb_nm <span class="ot">&lt;-</span> <span class="fu">paste0</span>(proj_num,<span class="st">&quot;_RRES_TOTS_INV&quot;</span>,inv_yr)</span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="fu">agric_update_tbl</span>(tbl,tb_nm,<span class="at">ovwr =</span> T)</span></code></pre></div>
+</div>
+<div id="creating-emission-surfaces" class="section level3">
+<h3>4 - Creating Emission Surfaces</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># Load reported totals</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>rep_tots <span class="ot">&lt;-</span> <span class="fu">agric_db_query</span>(<span class="fu">paste0</span>(<span class="st">&quot;SELECT * FROM &quot;</span>,proj_num,<span class="st">&quot;_RRES_TOTS_INV&quot;</span>,inv_yr),<span class="at">as_dt =</span> T)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># Link to where CSV output files are stored</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>em.dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(root_dir,inv_yr,<span class="st">&quot;_Inventory/Emission_Model_Output/2024_CSV/&quot;</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">#########################</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">### Read in parish look up table</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">######################### </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>lstk_par_lkup <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;SELECT * FROM SCF0102_PAR_LKUP WHERE YEAR = &quot;</span>,yr,<span class="st">&quot; AND EMISSION_TYPE = &#39;LSTK&#39;&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">agric_db_query</span>(<span class="at">as_dt =</span> T)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>fert_par_lkup <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;SELECT * FROM SCF0102_PAR_LKUP WHERE YEAR = &quot;</span>,yr,<span class="st">&quot; AND EMISSION_TYPE = &#39;FERT&#39;&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">agric_db_query</span>(<span class="at">as_dt =</span> T)</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>r_out.dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(out.dir,<span class="st">&quot;2_Disclosive_Rasters/&quot;</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co"># create QA folder for pollutant</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>r_qa_out.dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(r_out.dir,<span class="st">&quot;QA_docs/&quot;</span>,pols[<span class="dv">1</span>],<span class="st">&quot;/&quot;</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>SpatialUKCEH<span class="sc">::</span><span class="fu">create_dir</span>(r_qa_out.dir)</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co"># create raster folder for pollutant</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>r_pol_out.dir <span class="ot">&lt;-</span> <span class="fu">paste0</span>(r_out.dir,<span class="st">&quot;Rasters/&quot;</span>,pols[<span class="dv">1</span>],<span class="st">&quot;/&quot;</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>SpatialUKCEH<span class="sc">::</span><span class="fu">create_dir</span>(r_pol_out.dir)</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>param_lst <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">pollutant_text =</span> pols_txt[<span class="dv">1</span>],</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>                  <span class="at">pollutant =</span> pols[<span class="dv">1</span>],</span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>                  <span class="at">yr =</span> yr,</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>                  <span class="at">usr =</span> usr,</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>                  <span class="at">em.dir =</span> em.dir,</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>                  <span class="at">r.dir =</span> r_pol_out.dir)</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a><span class="fu">render</span>(<span class="at">input =</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata/Spatial_disaggregation.Rmd&quot;</span>,<span class="at">package =</span> <span class="st">&quot;AgricInvUKCEH&quot;</span>),</span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a>      <span class="at">output_file =</span> <span class="fu">paste0</span>(r_qa_out.dir,</span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>      param_lst<span class="sc">$</span>pollutant,<span class="st">&quot;_&quot;</span>,param_lst<span class="sc">$</span>yr,<span class="st">&quot;_emissions.html&quot;</span>),</span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>      <span class="at">params =</span> param_lst)</span></code></pre></div>
+</div>
+<div id="scale-emissions-and-aggregate-to-non-disclosive-categories" class="section level3">
+<h3>5 Scale emissions and aggregate to non-disclosive categories</h3>
+<p><strong>N.B.</strong> this code is likely to change with each
+inventory year (as the spreadsheet from Sarah Gilhepy changes)</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

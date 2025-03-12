@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Ed Carnell (edcarn@ceh.ac.uk)" />
+
+<meta name="date" content="2025-03-11" />
+
+<title>Emission Density Estimates</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Emission Density Estimates</h1>
+<h4 class="author">Ed Carnell (<a href="mailto:edcarn@ceh.ac.uk" class="email">edcarn@ceh.ac.uk</a>)</h4>
+<h4 class="date">2025-03-11</h4>
+
+
+
+<div id="agricultural-nh3-emission-densities" class="section level2">
+<h2>Agricultural NH<sub>3</sub> emission densities</h2>
+<div id="description" class="section level3">
+<h3>Description</h3>
+<p>The main sources of agricultural NH3 emissions surrounding each site
+are estimated and results calculated separately by source sector, where
+possible. The high-resolution holding-level agricultural statistics are
+subject to strict data licencing restrictions, therefore emissions from
+agricultural sectors associated with fewer than 5 agricultural holdings
+need to be merged with other emission sources to comply with data
+agreements in place, until non-disclosive outputs can be achieved. The
+data are summarised to show the relative contribution of the following
+source types; dairy cattle, other cattle, sheep, pigs, poultry, grass,
+crops and other sources. Where source sectors were disclosive
+(e.g. insufficient number of holdings with dairy cattle present), these
+were amalgamated into ‘other sources’ (containing a minimum of 5
+holdings).</p>
+</div>
+<div id="important-notes" class="section level3">
+<h3>Important Notes</h3>
+<p><strong>Although the finalised outputs of this script comply with the
+data licensing agreements of the agricultural census data, some of the
+intermediate objects (such as outputs from <code>agric_ems_in_sf</code>
+and <code>holds_buff</code>) contain sensitive information, which should
+not be saved!</strong></p>
+</div>
+<div id="tabulated-agricultural-emission-density-estimates-for-fenns-whixall-bettisfield-wem-and-cadney-mosses-sac" class="section level3">
+<h3>Tabulated agricultural emission density estimates for Fenn’s,
+Whixall, Bettisfield, Wem and Cadney Mosses SAC</h3>
+<p>The example below demonstrates how to produce an agricultural
+emission density estimate for a designated site in the UK.</p>
+<p>The example is for Fenn’s, Whixall, Bettisfield, Wem and Cadney
+Mosses SAC, which lies on the border of England and Wales. This site is
+frequently of interest for the development of Shared Nitrogen Action
+Plans as it situated in an intensive agricultural region.</p>
+<p>In this example, farms within 2 km of the SAC (on both sides of the
+border) are include in the emission density estimate.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## Load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">require</span>(SpatialUKCEH)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">require</span>(AgricInvUKCEH)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">require</span>(sf)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">require</span>(pool)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">require</span>(stringr)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># Load polygon to calculate the surrounding agricultural emission density for</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>sf_ste <span class="ot">&lt;-</span> <span class="fu">getSAC</span>(<span class="at">id =</span> <span class="st">&quot;UK0012912&quot;</span>)[<span class="dv">1</span>,]</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co"># Create a bounding box surrounding the site</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>bbx <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(sf_ste)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="do">## DISCLOSIVE OUTPUT</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co"># return all emissions on farms within 2km of the designated site</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>em <span class="ot">&lt;-</span> <span class="fu">agric_ems_in_sf</span>(bbx, <span class="at">buffer =</span> <span class="dv">2000</span>, <span class="at">year =</span> <span class="dv">2021</span>, <span class="at">as_dt =</span> T)</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>holds_buff <span class="ot">&lt;-</span> <span class="fu">agric_holds_in_buffer</span>(sf_ste,</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>                                    <span class="at">buffer =</span> <span class="dv">2000</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>                                    <span class="at">mask =</span> <span class="st">&quot;UK&quot;</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>                                    <span class="at">em =</span> em)</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>agric_nh3_dens <span class="ot">&lt;-</span> <span class="fu">agric_dens_estimate</span>(em,holds_buff,<span class="at">simplify =</span> F)</span></code></pre></div>
+<p>The output contains the following fields:</p>
+<ul>
+<li><strong>BUFFER</strong>: The width of the buffer zone surrounding
+the site (in metres)</li>
+<li><strong>VARIABLE</strong>: The agricultural sector contributing to
+emissions</li>
+<li><strong>SECT_PCT</strong>: Percentage (%) value the sector
+contributes to agricultural NH<sub>3</sub> emissions within the buffer
+zone</li>
+<li><strong>KG_NH3_HA</strong>: The emission density estimate for each
+sector in kg NH<sub>3</sub> ha<sup>-1</sup> year<sup>-1</sup></li>
+<li><strong>N_HOLDS</strong>: The number of holdings contributing
+to</li>
+</ul>
+</div>
+<div id="create-a-plot-of-agricultural-emissions-within-10km-of-designated-site" class="section level3">
+<h3>Create a plot of agricultural emissions within 10km of designated
+site</h3>
+<p>The example below produces agricultural emission density estimates
+for consecutive buffers (1 - 10 km from site boundary) for Fenn’s,
+Whixall, Bettisfield, Wem and Cadney Mosses SAC. The results are then
+visualised as a stacked bar chart, which we typically include in
+reports.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## Load packages</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">require</span>(SpatialUKCEH)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">require</span>(AgricInvUKCEH)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">require</span>(sf)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">require</span>(pool)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">require</span>(stringr)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">require</span>(data.table)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">require</span>(stringr)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co"># Load polygon to calculate the surrounding agricultural emission density for</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>sf_ste <span class="ot">&lt;-</span> <span class="fu">getSAC</span>(<span class="at">id =</span> <span class="st">&quot;UK0012912&quot;</span>)[<span class="dv">1</span>,]</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co"># Create a bounding box surrounding the site</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>bbx <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(sf_ste)</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="do">## loop through buffer zones 1 - 10km</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="at">X =</span> <span class="fu">seq</span>(<span class="dv">1000</span>,<span class="dv">10000</span>,<span class="dv">1000</span>), <span class="at">FUN =</span> <span class="cf">function</span>(buffer){</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  </span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>em <span class="ot">&lt;-</span> <span class="fu">agric_ems_in_sf</span>(bbx, <span class="at">buffer =</span> buffer, <span class="at">year =</span> <span class="dv">2021</span>, <span class="at">as_dt =</span> T)</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>holds_buff <span class="ot">&lt;-</span> <span class="fu">agric_holds_in_buffer</span>(sf_ste,</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>                                    <span class="at">buffer =</span> buffer,</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>                                    <span class="at">mask =</span> <span class="st">&quot;UK&quot;</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>                                    <span class="at">em =</span> em)</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="fu">agric_dens_estimate</span>(em,holds_buff,<span class="at">simplify =</span> F)</span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">do.call</span>(rbind,.)</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Dairy&quot;</span>,<span class="st">&quot;Beef&quot;</span>,<span class="st">&quot;Sheep&quot;</span>,<span class="st">&quot;Pig&quot;</span>,<span class="st">&quot;Poultry&quot;</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>         <span class="st">&quot;Minorlivestock&quot;</span>,<span class="st">&quot;Grass&quot;</span>,<span class="st">&quot;Crop&quot;</span>,<span class="st">&quot;Other Sources*&quot;</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>labs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Dairy&quot;</span>,<span class="st">&quot;Beef&quot;</span>,<span class="st">&quot;Sheep&quot;</span>,<span class="st">&quot;Pigs&quot;</span>,<span class="st">&quot;Poultry&quot;</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>          <span class="st">&quot;Horses, Goats &amp; Deer&quot;</span>,<span class="st">&quot;Mineral Fertiliser&quot;</span>,</span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>          <span class="st">&quot;Mineral Fertiliser&quot;</span>,<span class="st">&quot;Other agircultural sources&quot;</span>)</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#ba2e51&quot;</span>,<span class="st">&quot;#454bf7&quot;</span>,<span class="st">&quot;#9e94a3&quot;</span>,<span class="st">&quot;#ff96f3&quot;</span>,</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>          <span class="st">&quot;#ffe900&quot;</span>,<span class="st">&quot;#877d61&quot;</span>,<span class="st">&quot;#5a9152&quot;</span>,<span class="st">&quot;#44caf7&quot;</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>dt[,fact <span class="sc">:=</span> <span class="fu">factor</span>(<span class="fu">str_to_title</span>(VARIABLE),txt,labs)]</span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> dt, </span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> BUFFER, <span class="at">y =</span> KG_NH3_HA, <span class="at">fill =</span> fact))</span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>,<span class="at">colour=</span><span class="cn">NA</span>)</span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>( <span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.2</span>) ),</span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a>                            <span class="at">name =</span> <span class="fu">bquote</span>(<span class="fu">atop</span>(<span class="st">&quot;Total agricultural ammonia emission density&quot;</span>,</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>                          <span class="st">&quot;(&quot;</span><span class="sc">~</span>kg<span class="sc">~</span>NH[<span class="dv">3</span>]<span class="sc">~</span>ha<span class="sc">^-</span><span class="dv">1</span><span class="sc">~</span>yr<span class="sc">^-</span><span class="dv">1</span><span class="sc">~</span><span class="st">&quot;)&quot;</span>)))</span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2000</span>,<span class="dv">10000</span>,<span class="dv">2000</span>),</span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a>                            <span class="at">labels =</span> <span class="fu">paste0</span>(<span class="st">&quot;0 - &quot;</span>,<span class="fu">seq</span>(<span class="dv">2</span>,<span class="dv">10</span>,<span class="dv">2</span>),<span class="st">&quot; km&quot;</span>),</span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a>                            <span class="at">name =</span> <span class="st">&quot;Buffer zone from site boundary&quot;</span>)</span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a>p <span class="ot">&lt;-</span>  p<span class="sc">+</span> <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> cols,</span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a>                        <span class="at">name=</span><span class="st">&quot;Source&quot;</span>,</span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a>                       <span class="at">drop=</span>F,</span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a>                       <span class="at">breaks =</span> <span class="fu">unique</span>(labs),</span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">unique</span>(labs))</span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>txt_size <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a>font <span class="ot">&lt;-</span> <span class="st">&quot;sans&quot;</span></span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a>p <span class="ot">&lt;-</span> p<span class="sc">+</span><span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a>             <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">linewidth=</span><span class="dv">1</span>),</span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a>             <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">linewidth=</span><span class="dv">1</span>),</span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a>             <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>, <span class="at">family=</span>font,<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a>             <span class="at">legend.key.size =</span> <span class="fu">unit</span>(<span class="dv">1</span>,<span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a>             <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>, </span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a>                                        <span class="at">angle =</span> <span class="dv">25</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a>             <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a>             <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a>             <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a>             <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a>             <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a>             <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a>             <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>,<span class="at">family=</span>font,<span class="at">size=</span><span class="dv">12</span>,</span>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a>                                         <span class="at">hjust=</span><span class="dv">0</span>,<span class="at">margin=</span><span class="fu">margin</span>(<span class="dv">30</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)))</span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a>p</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
