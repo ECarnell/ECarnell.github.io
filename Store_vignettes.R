@@ -3,6 +3,18 @@ require(devtools)
 require(xml2)
 require(SpatialUKCEH)
 
+build_vig <- F
+if(build_vig){
+  devtools::install_github("ECarnell/SpatialUKCEH",
+                           ref = "main",
+                           build_vignettes = T,
+                           auth_token = Sys.getenv("GITHUBTOKEN"))
+  devtools::install_github("ECarnell/AgricInvUKCEH",
+                           ref = "main",
+                           build_vignettes = T,
+                           auth_token = Sys.getenv("GITHUBTOKEN"))
+}
+
 setwd("~/ECarnell.github.io/")
 create_dir("./html/")
 
@@ -14,17 +26,7 @@ index_html <- read_html("./index_template.html")
 # Add title and subheading
 body_node <- xml_find_first(index_html, "//body")
 
-build_vig <- F
-if(build_vig){
-  devtools::install_github("ECarnell/SpatialUKCEH",
-                           ref = "main",
-                           build_vignettes = T,
-                           auth_token = Sys.getenv("GITHUBTOKEN"))
-devtools::install_github("ECarnell/AgricInvUKCEH",
-                         ref = "main",
-                         build_vignettes = T,
-                         auth_token = Sys.getenv("GITHUBTOKEN"))
-}
+
 
 
 lib_pth <- .libPaths() %>% .[grepl("AppData",.)]
