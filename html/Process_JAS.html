@@ -13,7 +13,7 @@
 <meta name="author" content="Ed Carnell (edcarn@ceh.ac.uk)" />
 
 
-<title>Process JAS files</title>
+<title>Processing JAS files</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -337,11 +337,31 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Process JAS files</h1>
+<h1 class="title toc-ignore">Processing JAS files</h1>
 <h4 class="author">Ed Carnell (<a href="mailto:edcarn@ceh.ac.uk" class="email">edcarn@ceh.ac.uk</a>)</h4>
-<h4 class="date">Tuesday 11 March 2025</h4>
+<h4 class="date">Wednesday 12 March 2025</h4>
 
 
+<div id="TOC">
+<ul>
+<li><a href="#processing-jas-files-for-2023" id="toc-processing-jas-files-for-2023">Processing JAS files for 2023</a>
+<ul>
+<li><a href="#update-jas-census-look-up-table" id="toc-update-jas-census-look-up-table">1 - Update JAS census look-up
+table</a></li>
+<li><a href="#find-jas-files-and-create-look-up-table" id="toc-find-jas-files-and-create-look-up-table">2 - Find JAS files and
+create look up table</a></li>
+<li><a href="#process-holding-locations-for-england-wales-and-northern-ireland" id="toc-process-holding-locations-for-england-wales-and-northern-ireland">3
+- Process Holding Locations for England, Wales and Northern
+Ireland</a></li>
+<li><a href="#a-method-for-england-and-wales" id="toc-a-method-for-england-and-wales">3a Method for England and
+Wales</a></li>
+<li><a href="#b-method-for-scotland" id="toc-b-method-for-scotland">3b
+Method for Scotland</a></li>
+<li><a href="#c-method-for-northern-ireland" id="toc-c-method-for-northern-ireland">3c Method for Northern
+Ireland</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p><strong>Important Notes</strong></p>
 <p><strong>This script processes sensitive information, which should not
@@ -571,7 +591,7 @@ e.g. based on UPRN vs Postcodes).</p>
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">1-47-634-0002</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -585,7 +605,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="left">1-47-634-0006</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -599,7 +619,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">1-47-634-0009</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -613,7 +633,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="left">1-47-634-0018</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -627,7 +647,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">1-47-634-0067</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -641,7 +661,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="left">1-47-634-0078</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -655,7 +675,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">1-47-636-0006</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -669,7 +689,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="left">1-47-641-0036</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -683,7 +703,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">1-47-641-0158</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -697,7 +717,7 @@ e.g. based on UPRN vs Postcodes).</p>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="left">1-47-641-0171</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">3666</td>
 <td align="right">3</td>
 <td align="right">3</td>
@@ -748,52 +768,52 @@ and for crops/grass in hectares</p></li>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1-35-202-0007</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">4.55384</td>
 </tr>
 <tr class="even">
-<td align="left">1-35-202-0012</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">33.20041</td>
 </tr>
 <tr class="odd">
-<td align="left">1-35-202-0013</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">37.86000</td>
 </tr>
 <tr class="even">
-<td align="left">1-35-202-0041</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">17.77000</td>
 </tr>
 <tr class="odd">
-<td align="left">1-35-202-0048</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">26.46000</td>
 </tr>
 <tr class="even">
-<td align="left">1-35-202-0050</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">0.27880</td>
 </tr>
 <tr class="odd">
-<td align="left">1-35-202-0057</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">1.54089</td>
 </tr>
 <tr class="even">
-<td align="left">1-35-203-0003</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">0.02100</td>
 </tr>
 <tr class="odd">
-<td align="left">1-35-203-0013</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">82.82520</td>
 </tr>
 <tr class="even">
-<td align="left">1-35-204-0001</td>
+<td align="left">0-12-345-4789</td>
 <td align="left">ENG_2023_G2</td>
 <td align="right">0.12147</td>
 </tr>
@@ -887,7 +907,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0010</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">529</td>
 <td align="right">2</td>
@@ -895,7 +915,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="even">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0012</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">112</td>
 <td align="right">2</td>
@@ -903,7 +923,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0013</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">1067</td>
 <td align="right">2</td>
@@ -911,7 +931,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="even">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0035</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">58</td>
 <td align="right">2</td>
@@ -919,7 +939,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0036</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">17</td>
 <td align="right">2</td>
@@ -927,7 +947,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="even">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0040</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">11</td>
 <td align="right">2</td>
@@ -935,7 +955,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-0042</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">355</td>
 <td align="right">2</td>
@@ -943,7 +963,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="even">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-7999</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">33</td>
 <td align="right">2</td>
@@ -951,7 +971,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-009-9000</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">5</td>
 <td align="right">2</td>
@@ -959,7 +979,7 @@ where: 1 = England 2 = Wales 3 = Scotland 4 = Northern Ireland.</p></li>
 <tr class="even">
 <td align="right">1</td>
 <td align="right">2023</td>
-<td align="left">2-52-010-0001</td>
+<td align="left">0-12-345-4789</td>
 <td align="right">5</td>
 <td align="right">675</td>
 <td align="right">2</td>
