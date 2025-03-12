@@ -14,7 +14,7 @@ index_html <- read_html("./index_template.html")
 # Add title and subheading
 body_node <- xml_find_first(index_html, "//body")
 
-build_vig <- F
+build_vig <- T
 if(build_vig){
 devtools::install_github("ECarnell/AgricInvUKCEH",
                          ref = "main",
